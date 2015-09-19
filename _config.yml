@@ -85,8 +85,7 @@ links:
 
 
 #### Comment
-duoshuo_shortname: lifei   ## e.g. wuchong   your duoshuo short name.
-disqus_shortname:     ## e.g. wuchong   your disqus short name.
+duoshuo_shortname: lifei
 
 #### Share button
 jiathis:
