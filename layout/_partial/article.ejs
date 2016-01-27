@@ -1,45 +1,50 @@
-<% if (theme.index.expand == true) { %> 
-    <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
-      <%- partial('post/gallery') %>
+<% if (theme.index.expand == true) { %>
+  <% if (page.layout=='photo' && item.photos && item.photos.length){ %>
+    <%- partial('post/gallery') %>
+  <% } %>
+  <article class="post-expand <%= item.layout %>" itemprop="articleBody">
+    <%- partial('post/header') %>
+  <div class="article-content">
+    <% if (item.excerpt && index){ %>
+    <%- item.excerpt %>
+    <% } else { %>
+    <%- item.content %>
     <% } %>
-    <article class="post-expand <%= item.layout %>" itemprop="articleBody"> 
-        <%- partial('post/header') %>
-    <div class="article-content">
-        <% if (item.excerpt && index){ %>
-        <%- item.excerpt %>
-        <% } else { %>
-        <%- item.content %>
-        <% } %>
-        
-        <p class="article-more-link">
-          <% if (item.excerpt && index && theme.index.excerpt_link){ %>
-            <a href="<%- url_for(item.path) %>#more"><%= theme.index.excerpt_link %></a>
-          <% } %>
-       </p>
-    </div>
-    <%- partial('post/footer', {index: true}) %>
-    </article>
+
+    <% if (item.excerpt && index && theme.index.excerpt_link){ %>
+    <p class="article-more-link">
+      <a href="<%- url_for(item.path) %>#more"><%= theme.index.excerpt_link %></a>
+    </p>
+    <% } %>
+  </div>
+  <%- partial('post/footer', {index: true}) %>
+  </article>
 <% }else{ %>
 <section class="post" itemscope itemprop="blogitem">
-  <% if (item.link) { %> 
-    <a href="<%- item.link %>" target="_blank"> 
+  <% if (item.link) { %>
+    <a href="<%- item.link %>" target="_blank">
   <% } else{ %>
     <a href="<%- config.root %><%- item.path %>" title="<%= item.title %>" itemprop="url">
   <% } %>
     <h1 itemprop="name"><%= item.title %></h1>
-    <% if (desc){ %>
-     <% if(item.description){ %>
-      <p itemprop="description" ><%- item.description %></p>
-      <% } else if(item.excerpt){ %>
-       <p itemprop="description" ><%= strip_html(item.excerpt).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 140) %></p>
+    <time datetime="<%= date_xml(item.date) %>" itemprop="datePublished"> <%= __('datepublished') %> <%= item.date.format(config.date_format) %> By <%= config.author %></time>
+    <% if (desc) { %>
+      <% if (item.description) { %>
+        <p itemprop="description" ><%- markdown(item.description) %></p>
+      <% } else if (item.excerpt) { %>
+        <p itemprop="description" ><%= strip_html(item.excerpt).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 140) %></p>
       <% } else {%>
-           <p itemprop="description" ><%= strip_html(item.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 140) %></p>
-        <% } %>
+        <p itemprop="description" ><%= strip_html(item.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 140) %></p>
+      <% } %>
     <% } %>
-    <time datetime="<%= date_xml(item.date) %>" itemprop="datePublished"><%= item.date.format(config.date_format) %></time>
+    <% if (item.tags && item.tags.length){ %>
+      <div style="margin-top: 10px; line-height: 32px;">
+        标签：
+      <% item.tags.forEach(function (tag) { %>
+        <%= tag.name %>&nbsp;&nbsp;&nbsp;
+      <% }); %>
+    </div>
+    <% } %>
   </a>
 </section>
 <% } %>
-
-
-
